@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StockScope - Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <span class="brand-badge">S</span>StockScope
+      </a>
+      <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="market.html">Market</a></li>
+          <li class="nav-item"><a class="nav-link" href="portfolio.html">Portfolio</a></li>
+          <li class="nav-item"><a class="nav-link" href="pro.html">Pro</a></li>
+          <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="app-card">
+            <h1 class="h2 fw-bold mb-3">Login / Registration</h1>
+            <p class="text-muted-custom">Create an account or sign in to personalize your watchlist experience.</p>
+
+            <div id="formMessage" class="alert d-none" role="alert"></div>
+
+            <ul class="nav nav-pills mb-4" id="authTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="register-tab" data-bs-toggle="pill" data-bs-target="#registerPanel" type="button" role="tab">Register</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="login-tab" data-bs-toggle="pill" data-bs-target="#loginPanel" type="button" role="tab">Sign in</button>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="registerPanel" role="tabpanel">
+                <form id="registerForm" novalidate>
+                  <div class="mb-3">
+                    <label for="registerName" class="form-label">Full name</label>
+                    <input id="registerName" class="form-control" type="text" placeholder="Enter your full name" autocomplete="name" required>
+                    <div id="registerNameError" class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="registerEmail" class="form-label">Email address</label>
+                    <input id="registerEmail" class="form-control" type="email" placeholder="student@example.com" autocomplete="email" required>
+                    <div id="registerEmailError" class="invalid-feedback"></div>
+                    <div class="form-hint">Use a valid email format, for example student@example.com.</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <input id="registerPassword" class="form-control" type="password" placeholder="8+ characters with uppercase, lowercase, and number" autocomplete="new-password" required>
+                    <div id="registerPasswordError" class="invalid-feedback"></div>
+                    <div class="form-hint">Password must be at least 8 characters and include uppercase, lowercase, and a number.</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="registerConfirmPassword" class="form-label">Confirm password</label>
+                    <input id="registerConfirmPassword" class="form-control" type="password" placeholder="Repeat your password" autocomplete="new-password" required>
+                    <div id="registerConfirmPasswordError" class="invalid-feedback"></div>
+                  </div>
+
+                  <button class="btn btn-accent w-100" type="submit">Create account</button>
+                </form>
+              </div>
+
+              <div class="tab-pane fade" id="loginPanel" role="tabpanel">
+                <form id="signInForm" novalidate>
+                  <div class="mb-3">
+                    <label for="loginEmail" class="form-label">Email address</label>
+                    <input id="loginEmail" class="form-control" type="email" placeholder="student@example.com" autocomplete="email" required>
+                    <div id="loginEmailError" class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Password</label>
+                    <input id="loginPassword" class="form-control" type="password" placeholder="Your password" autocomplete="current-password" required>
+                    <div id="loginPasswordError" class="invalid-feedback"></div>
+                  </div>
+
+                  <button class="btn btn-accent w-100" type="submit">Sign in</button>
+                </form>
+              </div>
+            </div>
+
+            <hr class="border-secondary my-4">
+            <div id="currentUserBox" class="text-muted-custom"></div>
+            <button id="logoutButton" class="btn btn-outline-light-custom btn-sm mt-3 d-none" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container text-center">Manage your StockScope account and watchlist preferences.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const message = document.getElementById("formMessage");
+    const currentUserBox = document.getElementById("currentUserBox");
+    const logoutButton = document.getElementById("logoutButton");
+
+    function showMessage(text, type) {
+      message.className = `alert alert-${type}`;
+      message.textContent = text;
+    }
+
+    function clearMessage() {
+      message.className = "alert d-none";
+      message.textContent = "";
+    }
+
+    function setFieldError(inputId, errorId, text) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+
+      if (!input || !error) {
+        return;
+      }
+
+      input.classList.toggle("is-invalid", Boolean(text));
+      error.textContent = text || "";
+    }
+
+    function clearFieldErrors() {
+      [
+        ["registerName", "registerNameError"],
+        ["registerEmail", "registerEmailError"],
+        ["registerPassword", "registerPasswordError"],
+        ["registerConfirmPassword", "registerConfirmPasswordError"],
+        ["loginEmail", "loginEmailError"],
+        ["loginPassword", "loginPasswordError"]
+      ].forEach(([inputId, errorId]) => setFieldError(inputId, errorId, ""));
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    }
+
+    function isPasswordValid(password) {
+      return (
+        password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /\d/.test(password)
+      );
+    }
+
+    function renderCurrentUser() {
+      const currentUser = getCurrentUser();
+
+      if (currentUser) {
+        currentUserBox.textContent = `Logged in as ${currentUser.name} (${currentUser.email}).`;
+        logoutButton.classList.remove("d-none");
+      } else {
+        currentUserBox.textContent = "No user is currently signed in.";
+        logoutButton.classList.add("d-none");
+      }
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearMessage();
+      clearFieldErrors();
+
+      const name = document.getElementById("registerName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim().toLowerCase();
+      const password = document.getElementById("registerPassword").value;
+      const confirmPassword = document.getElementById("registerConfirmPassword").value;
+
+      let isValid = true;
+
+      if (name.length < 2) {
+        setFieldError("registerName", "registerNameError", "Please enter your full name.");
+        isValid = false;
+      }
+
+      if (!validateEmail(email)) {
+        setFieldError("registerEmail", "registerEmailError", "Please enter a valid email address, for example student@example.com.");
+        isValid = false;
+      }
+
+      if (!isPasswordValid(password)) {
+        setFieldError("registerPassword", "registerPasswordError", "Password must be at least 8 characters and include uppercase, lowercase, and a number.");
+        isValid = false;
+      }
+
+      if (password !== confirmPassword) {
+        setFieldError("registerConfirmPassword", "registerConfirmPasswordError", "Passwords do not match.");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        showMessage("Please correct the highlighted fields.", "danger");
+        return;
+      }
+
+      try {
+        const user = registerUser(name, email, password);
+        showMessage(`Account created. Welcome, ${user.name}!`, "success");
+        event.target.reset();
+        renderCurrentUser();
+      } catch (error) {
+        if (error.message.toLowerCase().includes("email")) {
+          setFieldError("registerEmail", "registerEmailError", error.message);
+        }
+
+        showMessage(error.message, "danger");
+      }
+    });
+
+    document.getElementById("signInForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearMessage();
+      clearFieldErrors();
+
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value;
+
+      let isValid = true;
+
+      if (!validateEmail(email)) {
+        setFieldError("loginEmail", "loginEmailError", "Please enter a valid email address.");
+        isValid = false;
+      }
+
+      if (!password) {
+        setFieldError("loginPassword", "loginPasswordError", "Please enter your password.");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        showMessage("Please correct the highlighted fields.", "danger");
+        return;
+      }
+
+      try {
+        const user = loginUser(email, password);
+        showMessage(`Signed in successfully. Welcome back, ${user.name}!`, "success");
+        event.target.reset();
+        renderCurrentUser();
+      } catch (error) {
+        showMessage(error.message, "danger");
+      }
+    });
+
+    logoutButton.addEventListener("click", function () {
+      logoutUser();
+      showMessage("You have been logged out.", "info");
+      renderCurrentUser();
+    });
+
+    renderCurrentUser();
+  </script>
+</body>
+</html>
