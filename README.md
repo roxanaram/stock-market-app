@@ -1,5 +1,7 @@
 # StockScope
 
+https://roxanaram.github.io/stock-market-app/
+
 A responsive stock market application with a web version and a Flutter mobile app.  
 The project allows users to explore stocks, view market data, check company details, manage a watchlist, switch currencies, and use location-based market filtering.
 
